@@ -28,7 +28,14 @@
                         <td><?= $mostrar['id'] ?></td>
                         <td><?= $mostrar['nome'] ?></td>
                         <td><?= $mostrar['informacoes'] ?></td>
-                        <td>Excluir e Editar</td>
+                        <td>
+                            <a href="?p=excluir/categoria&id=<?= $mostrar['id'] ?>"
+                            class="btn btn-danger"
+                            title="Excluir"
+                            onclick="return confirm('Tem certeza que deseja excluir?')">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        </td>
                     </tr>
                     <?php
                     }
