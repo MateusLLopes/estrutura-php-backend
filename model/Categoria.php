@@ -1,7 +1,7 @@
 <?php
 
 //exige a tipificação dos atributos e métodos
-declare(strip_types=1);
+declare(strict_types=1);
 
 class Categoria
 {
@@ -21,7 +21,7 @@ class Categoria
         return $this;
     }
 
-    public function getNome(): string 
+    public function getNome(): string
     {
         return $this->nome;
     }
