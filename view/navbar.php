@@ -9,6 +9,12 @@
                 <a class="nav-link" href="?p=categorias">
                     <i class="bi bi-list-task"></i> Consultar Categorias
                 </a>
+                <a class="nav-link" href="?p=clientes">
+                    <i class="bi bi-list-task"></i> Consultar Clientes
+                </a>
+                <a class="nav-link" href="?p=fornecedores">
+                    <i class="bi bi-list-task"></i> Consultar Fornecedores
+                </a>
             </li>
         </ul>
     </div>

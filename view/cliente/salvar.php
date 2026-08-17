@@ -1,5 +1,5 @@
 <h3 class="mt-3 text-primary">
-    Categoria
+    Clientes
 </h3>
 
 <div class="card shadow mt-3">
@@ -16,7 +16,7 @@
                     class="form-control"
                     id="txtnome"
                     name="txtnome"
-                    placeholder="Categoria"
+                    placeholder="Nome do cliente"
                     value=""
                 >
             </div>
@@ -40,6 +40,7 @@
 
         <div class="form-group row mt-3">
             <div class="col-sm-10">
+
                 <input
                     type="submit"
                     class="btn btn-primary"
@@ -47,9 +48,10 @@
                     value="Cadastrar"
                 >
 
-                <a href="?p=categorias" class="btn btn-danger">
+                <a href="?p=clientes" class="btn btn-danger">
                     Cancelar
                 </a>
+
             </div>
         </div>
 
@@ -63,35 +65,35 @@ if (filter_input(INPUT_POST, 'btnsalvar')) {
     $nome = filter_input(INPUT_POST, 'txtnome') ?? '';
     $info = filter_input(INPUT_POST, 'txtinformacoes') ?? '';
 
-    require_once __DIR__ . '/../../model/Categoria.php';
-    require_once __DIR__ . '/../../dao/CategoriaDAO.php';
+    require_once __DIR__ . '/../../model/Cliente.php';
+    require_once __DIR__ . '/../../dao/ClienteDAO.php';
 
-    $categoria = new Categoria();
+    $cliente = new Cliente();
 
-    $categoria->setId(null);
-    $categoria->setNome($nome);
-    $categoria->setInformacoes($info);
+    $cliente->setId(null);
+    $cliente->setNome($nome);
+    $cliente->setInformacoes($info);
 
-    $categoriaDAO = new CategoriaDAO();
+    $clienteDAO = new ClienteDAO();
 
-    if ($categoriaDAO->salvar($categoria)) {
+    if ($clienteDAO->salvar($cliente)) {
         ?>
 
         <div class="alert alert-primary mt-3" role="alert">
-            Categoria - cadastro efetuado com sucesso.
+            Cliente - cadastro efetuado com sucesso.
         </div>
 
-        <meta http-equiv="refresh" content="0.2;URL=?p=categorias">
+        <meta http-equiv="refresh" content="0.2;URL=?p=clientes">
 
         <?php
     } else {
         ?>
 
         <div class="alert alert-danger mt-3" role="alert">
-            Categoria - erro ao cadastrar.
+            Cliente - erro ao cadastrar.
         </div>
 
-        <meta http-equiv="refresh" content="0.2;URL=?p=categorias">
+        <meta http-equiv="refresh" content="0.2;URL=?p=clientes">
 
         <?php
     }

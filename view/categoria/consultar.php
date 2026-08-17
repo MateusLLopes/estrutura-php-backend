@@ -19,9 +19,10 @@
                 </thead>
                 <tbody>
                     <?php
-                    include_once '../models/Categoria.php';
-                    $cat = new Categoria();
-                    $dados = $cat->listar(null);
+                    include_once(__DIR__ . "/../../model/Categoria.php");
+                    include_once(__DIR__ . "/../../dao/CategoriaDAO.php");
+                    $catDAO = new CategoriaDAO();
+                    $dados = $catDAO->listar();
                     foreach ($dados as $mostrar) {
                     ?>
                     <tr>

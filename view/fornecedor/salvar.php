@@ -1,5 +1,5 @@
 <h3 class="mt-3 text-primary">
-    Categoria
+    Fornecedores
 </h3>
 
 <div class="card shadow mt-3">
@@ -16,7 +16,7 @@
                     class="form-control"
                     id="txtnome"
                     name="txtnome"
-                    placeholder="Categoria"
+                    placeholder="Nome do fornecedor"
                     value=""
                 >
             </div>
@@ -40,6 +40,7 @@
 
         <div class="form-group row mt-3">
             <div class="col-sm-10">
+
                 <input
                     type="submit"
                     class="btn btn-primary"
@@ -47,9 +48,10 @@
                     value="Cadastrar"
                 >
 
-                <a href="?p=categorias" class="btn btn-danger">
+                <a href="?p=fornecedores" class="btn btn-danger">
                     Cancelar
                 </a>
+
             </div>
         </div>
 
@@ -63,35 +65,35 @@ if (filter_input(INPUT_POST, 'btnsalvar')) {
     $nome = filter_input(INPUT_POST, 'txtnome') ?? '';
     $info = filter_input(INPUT_POST, 'txtinformacoes') ?? '';
 
-    require_once __DIR__ . '/../../model/Categoria.php';
-    require_once __DIR__ . '/../../dao/CategoriaDAO.php';
+    require_once __DIR__ . '/../../model/Fornecedor.php';
+    require_once __DIR__ . '/../../dao/FornecedorDAO.php';
 
-    $categoria = new Categoria();
+    $fornecedor = new Fornecedor();
 
-    $categoria->setId(null);
-    $categoria->setNome($nome);
-    $categoria->setInformacoes($info);
+    $fornecedor->setId(null);
+    $fornecedor->setNome($nome);
+    $fornecedor->setInformacoes($info);
 
-    $categoriaDAO = new CategoriaDAO();
+    $fornecedorDAO = new FornecedorDAO();
 
-    if ($categoriaDAO->salvar($categoria)) {
+    if ($fornecedorDAO->salvar($fornecedor)) {
         ?>
 
         <div class="alert alert-primary mt-3" role="alert">
-            Categoria - cadastro efetuado com sucesso.
+            Fornecedor - cadastro efetuado com sucesso.
         </div>
 
-        <meta http-equiv="refresh" content="0.2;URL=?p=categorias">
+        <meta http-equiv="refresh" content="0.2;URL=?p=fornecedores">
 
         <?php
     } else {
         ?>
 
         <div class="alert alert-danger mt-3" role="alert">
-            Categoria - erro ao cadastrar.
+            Fornecedor - erro ao cadastrar.
         </div>
 
-        <meta http-equiv="refresh" content="0.2;URL=?p=categorias">
+        <meta http-equiv="refresh" content="0.2;URL=?p=fornecedores">
 
         <?php
     }
