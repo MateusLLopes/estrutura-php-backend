@@ -1,0 +1,1 @@
+<?php require_once '../controller/ClienteController.php'; $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT); if ($id) { $ok = (new ClienteController())->excluir($id); echo '<div class="alert alert-'.($ok?'primary':'danger').'">'.($ok?'Cliente excluído com sucesso.':'Erro ao excluir cliente.').'</div>'; } ?><meta http-equiv="refresh" content="1;URL=?p=clientes">
