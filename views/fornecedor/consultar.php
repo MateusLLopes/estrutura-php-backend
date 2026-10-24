@@ -1,10 +1,60 @@
-<div class="card shadow mb-4"><div class="table-responsive-sm mt-4">
-<h3 class="ml-3">Listar Fornecedores
-<a class="btn btn-success float-right mb-3 mr-3" href="?p=add/fornecedor"><i class="bi bi-database-fill-add"></i></a></h3>
-<table class="table table-striped table-sm"><thead><tr><th>ID</th><th>Razão Social</th><th>E-mail</th><th>Telefone</th><th>Ações</th></tr></thead><tbody>
-<?php require_once '../controller/FornecedorController.php'; $controller = new FornecedorController(); foreach ($controller->listar() as $mostrar): ?>
-<tr><td><?= (int)$mostrar['id'] ?></td><td><?= htmlspecialchars($mostrar['razao_social']) ?></td><td><?= htmlspecialchars($mostrar['email']) ?></td><td><?= htmlspecialchars($mostrar['telefone']) ?></td><td>
-<a href="?p=editar/fornecedor&id=<?= (int)$mostrar['id'] ?>" class="btn btn-warning" title="Editar"><i class="bi bi-pencil-square"></i></a>
-<a href="?p=excluir/fornecedor&id=<?= (int)$mostrar['id'] ?>" class="btn btn-danger" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?')"><i class="bi bi-x-circle"></i></a>
-</td></tr>
-<?php endforeach; ?></tbody></table></div></div>
+<div class="col-sm-12 mb-4">
+
+    <div class="card shadow mb-4">
+        <div class="table-responsive-sm mt-4">
+            <h3 class="ml-3">
+                Listar Fornecedores
+                <a class="btn btn-success float-right mb-3 mr-3" href="?p=add/fornecedor"><i class="bi bi-building-add"></i></a>
+            </h3>
+
+            <form method="post" class="form-inline mb-3 ml-3">
+                <input type="text" class="form-control mr-2" name="razaoSocial" placeholder="Pesquisar fornecedor">
+                <input type="submit" class="btn btn-primary" name="enviar" value="Pesquisar">
+            </form>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Razão Social</th>
+                        <th>E-mail</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+
+                    require_once '../controller/FornecedorController.php';
+
+                    $controller = new FornecedorController();
+
+                    if (filter_input(INPUT_POST, 'enviar')) {
+                        $razaoSocial = trim((string) (filter_input(INPUT_POST, 'razaoSocial') ?? ''));
+                        $dados = $razaoSocial === '' ? $controller->listar() : $controller->pesquisar($razaoSocial);
+                    } else {
+                        $dados = $controller->listar();
+                    }
+
+                    foreach ($dados as $mostrar) {
+                    ?>
+                        <tr>
+                            <td><?= htmlspecialchars((string) ($mostrar['id'] ?? '')) ?></td>
+                            <td><?= htmlspecialchars((string) ($mostrar['razao_social'] ?? '')) ?></td>
+                            <td><?= htmlspecialchars((string) ($mostrar['email'] ?? '')) ?></td>
+                            <td>
+                                <a href="?p=excluir/fornecedor&id=<?= (int) ($mostrar['id'] ?? 0) ?>"
+                                    class="btn btn-danger"
+                                    title="Excluir"
+                                    onclick="return confirm('Tem certeza que deseja excluir?')">
+                                    <i class="bi bi-x-circle"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

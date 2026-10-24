@@ -9,6 +9,11 @@
                 <a class="btn btn-primary float-right mb-3 mr-3" href="?p=pesquisar/categoria"><i class="bi bi-search"></i></a>
             </h3>
 
+            <form method="post" class="form-inline mb-3 ml-3">
+                <input type="text" class="form-control mr-2" name="nome" placeholder="Pesquisar categoria">
+                <input type="submit" class="btn btn-primary" name="enviar" value="Pesquisar">
+            </form>
+
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
@@ -23,10 +28,19 @@
 
                     require_once '../controller/CategoriaController.php';
 
-
                     $controller = new CategoriaController();
 
-                    $dados = $controller->listar();
+                    if (filter_input(INPUT_POST, 'enviar')) {
+                        $nome = trim((string) (filter_input(INPUT_POST, 'nome') ?? ''));
+
+                        if ($nome === '') {
+                            $dados = $controller->listar();
+                        } else {
+                            $dados = $controller->pesquisar('nome', $nome);
+                        }
+                    } else {
+                        $dados = $controller->listar();
+                    }
 
                     foreach ($dados as $mostrar) {
                     ?>
@@ -43,7 +57,7 @@
                                 </a>
                                 <a href="?p=editar/categoria&id=<?= $mostrar['id'] ?>"
                                     class="btn btn-warning">
-                                    <i class="i bi-pencil-square"></i>
+                                    <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>
                         </tr>

@@ -1,30 +1,40 @@
 <?php
+
 declare(strict_types=1);
-require_once '../model/Cliente.php';
-require_once '../dao/ClienteDAO.php';
+
+require_once "../model/Cliente.php";
+require_once "../dao/ClienteDAO.php";
 
 class ClienteController
 {
     private ClienteDAO $dao;
-    public function __construct() { $this->dao = new ClienteDAO(); }
 
-    private function montar(?int $id = null): Cliente
+    public function __construct()
     {
-        return (new Cliente())
-            ->setId($id)
-            ->setNome(filter_input(INPUT_POST, 'txtnome') ?? '')
-            ->setEmail(filter_input(INPUT_POST, 'txtemail') ?? '')
-            ->setTelefone(filter_input(INPUT_POST, 'txttelefone') ?? '');
+        $this->dao = new ClienteDAO();
     }
 
-    public function salvar(): bool { return $this->dao->salvar($this->montar()); }
-    public function alterar(): bool
+    public function salvar(): bool
     {
-        $id = filter_input(INPUT_POST, 'txtid', FILTER_VALIDATE_INT);
-        if (!$id) return false;
-        return $this->dao->salvar($this->montar($id));
+        $cliente = new Cliente();
+        $cliente->setNome(filter_input(INPUT_POST, 'nome') ?? '');
+        $cliente->setEmail(filter_input(INPUT_POST, 'email') ?? '');
+
+        return $this->dao->salvar($cliente);
     }
-    public function listar(): array { return $this->dao->listar(); }
-    public function buscarPorId(int $id): ?Cliente { return $this->dao->buscarPorId($id); }
-    public function excluir(int $id): bool { return $this->dao->excluir($id); }
+
+    public function listar(): array
+    {
+        return $this->dao->listar();
+    }
+
+    public function excluir(int $id): bool
+    {
+        return $this->dao->excluir($id);
+    }
+
+    public function pesquisar(string $valor): array
+    {
+        return $this->dao->pesquisar($valor);
+    }
 }

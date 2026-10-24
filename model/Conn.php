@@ -7,7 +7,7 @@ class Conn extends PDO
     //www.teste.com/banco
     private $host = "localhost";
     private $usuario = "root";
-    //usbw
+    // XAMPP usa senha vazia em ambiente local
     private $senha = "";
     private $db = "bd_backend";
 

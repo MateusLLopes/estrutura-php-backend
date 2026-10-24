@@ -7,7 +7,6 @@ require_once "../dao/CategoriaDAO.php";
 
 class CategoriaController
 {
-
     private Categoria $categoria;
     private CategoriaDAO $dao;
 
@@ -19,52 +18,61 @@ class CategoriaController
 
     public function salvar(): bool
     {
-        $this->categoria->setNome(
-            filter_input(INPUT_POST, "txtnome")
-        );
-        $this->categoria->setInformacoes(
-            filter_input(INPUT_POST, "txtinformacoes")
+        $categoria = new Categoria();
+
+        $categoria->setNome(
+            filter_input(INPUT_POST, 'txtnome') ?? ''
         );
 
-        return  $this->dao->salvar($this->categoria);
+        $categoria->setInformacoes(
+            filter_input(INPUT_POST, 'txtinformacoes') ?? ''
+        );
+
+        return $this->dao->salvar($categoria);
     }
 
     public function alterar(): bool
     {
-        $this->categoria->setId(
-            (int) filter_input(INPUT_POST, "txtid")
+        $categoria = new Categoria();
+
+        $categoria->setId(
+            filter_input(
+                INPUT_POST,
+                'txtid',
+                FILTER_VALIDATE_INT
+            )
         );
 
-        $this->categoria->setNome(
-            filter_input(INPUT_POST, "txtnome")
+        $categoria->setNome(
+            //usa o txtnome se nulo pega o vazio À direita
+            filter_input(INPUT_POST, 'txtnome') ?? ''
         );
 
-        $this->categoria->setInformacoes(
-            filter_input(INPUT_POST, "txtinformacoes")
+        $categoria->setInformacoes(
+            filter_input(INPUT_POST, 'txtinformacoes') ?? ''
         );
 
-        return  $this->dao->salvar($this->categoria);
+        return $this->dao->salvar($categoria);
     }
 
     public function excluir(int $id): bool
     {
-        return  $this->dao->excluir($id);
+        return $this->dao->excluir($id);
     }
 
     public function listar(): array
     {
-        return  $this->dao->listar();
+        return $this->dao->listar();
     }
 
     public function buscarPorId(int $id): ?Categoria
     {
-        return  $this->dao->buscarPorId($id);
+        return $this->dao->buscarPorId($id);
     }
 
     public function pesquisar(string $campo, string $valor): array
     {
-
-        return  $this->dao->pesquisar(
+        return $this->dao->pesquisar(
             $campo,
             $valor
         );

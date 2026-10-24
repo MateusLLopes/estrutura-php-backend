@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once '../model/Conn.php';
@@ -7,44 +8,76 @@ require_once '../model/Fornecedor.php';
 class FornecedorDAO
 {
     private PDO $conn;
-    public function __construct() { $this->conn = new Conn(); }
+
+    public function __construct()
+    {
+        $this->conn = new Conn();
+    }
 
     public function salvar(Fornecedor $fornecedor): bool
     {
-        if ($fornecedor->getId() === null) {
-            $stmt = $this->conn->prepare('INSERT INTO fornecedor (razao_social, email, telefone) VALUES (?, ?, ?)');
-            $stmt->bindValue(1, $fornecedor->getRazaoSocial());
-            $stmt->bindValue(2, $fornecedor->getEmail());
-            $stmt->bindValue(3, $fornecedor->getTelefone());
-        } else {
-            $stmt = $this->conn->prepare('UPDATE fornecedor SET razao_social = ?, email = ?, telefone = ? WHERE id = ?');
-            $stmt->bindValue(1, $fornecedor->getRazaoSocial());
-            $stmt->bindValue(2, $fornecedor->getEmail());
-            $stmt->bindValue(3, $fornecedor->getTelefone());
-            $stmt->bindValue(4, $fornecedor->getId(), PDO::PARAM_INT);
+        try {
+            $sql = "INSERT INTO fornecedor (razao_social, email)
+                    VALUES (?, ?)";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(1, trim($fornecedor->getRazaoSocial()));
+            $stmt->bindValue(2, trim($fornecedor->getEmail()));
+
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
         }
-        return $stmt->execute();
     }
 
     public function listar(): array
     {
-        return $this->conn->query('SELECT * FROM fornecedor ORDER BY razao_social')->fetchAll(PDO::FETCH_ASSOC);
-    }
+        try {
+            $stmt = $this->conn->query(
+                "SELECT id, razao_social, email
+                   FROM fornecedor
+               ORDER BY razao_social ASC"
+            );
 
-    public function buscarPorId(int $id): ?Fornecedor
-    {
-        $stmt = $this->conn->prepare('SELECT * FROM fornecedor WHERE id = ?');
-        $stmt->bindValue(1, $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$dados) return null;
-        return (new Fornecedor())->setId((int)$dados['id'])->setRazaoSocial($dados['razao_social'])->setEmail($dados['email'])->setTelefone($dados['telefone']);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 
     public function excluir(int $id): bool
     {
-        $stmt = $this->conn->prepare('DELETE FROM fornecedor WHERE id = ?');
-        $stmt->bindValue(1, $id, PDO::PARAM_INT);
-        return $stmt->execute();
+        try {
+            $sql = "DELETE FROM fornecedor WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(1, $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function pesquisar(string $razaoSocial): array
+    {
+        $razaoSocial = trim($razaoSocial);
+
+        if ($razaoSocial === '') {
+            return [];
+        }
+
+        try {
+            $sql = "SELECT id, razao_social, email
+                      FROM fornecedor
+                     WHERE razao_social LIKE :razaoSocial
+                  ORDER BY razao_social ASC";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':razaoSocial', '%' . $razaoSocial . '%', PDO::PARAM_STR);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 }

@@ -81,7 +81,7 @@ class CategoriaDAO
 
         $categoria = new Categoria();
 
-        $categoria->setId($dados["id"]);
+        $categoria->setId((int)$dados['id']);
         $categoria->setNome($dados["nome"]);
         $categoria->setInformacoes($dados["informacoes"]);
 
@@ -122,7 +122,7 @@ class CategoriaDAO
                   ORDER BY nome ASC";
 
                 $valorPesquisa = mb_strtoupper($valor) . "%";
-            } else {
+            } else if ($campo == "informacoes") {
 
                 $sql = "SELECT *
                       FROM categoria
@@ -130,6 +130,9 @@ class CategoriaDAO
                   ORDER BY nome ASC";
 
                 $valorPesquisa = "%" . mb_strtoupper($valor) . "%";
+            } else {
+                $sql = "";
+                $valorPesquisa = "";
             }
 
 
@@ -146,7 +149,6 @@ class CategoriaDAO
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-
             throw new Exception($e->getMessage());
         }
     }

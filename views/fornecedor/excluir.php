@@ -1,1 +1,27 @@
-<?php require_once '../controller/FornecedorController.php'; $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT); if ($id) { $ok = (new FornecedorController())->excluir($id); echo '<div class="alert alert-'.($ok?'primary':'danger').'">'.($ok?'Fornecedor excluído com sucesso.':'Erro ao excluir fornecedor.').'</div>'; } ?><meta http-equiv="refresh" content="1;URL=?p=fornecedores">
+<?php
+
+require_once '../controller/FornecedorController.php';
+
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if ($id) {
+
+    $controller = new FornecedorController();
+
+    if ($controller->excluir($id)) {
+?>
+        <div class="alert alert-primary" role="alert">
+            Fornecedor excluído com sucesso
+        </div>
+    <?php
+    } else {
+    ?>
+        <div class="alert alert-danger" role="alert">
+            Erro ao excluir fornecedor
+        </div>
+<?php
+    }
+}
+?>
+
+<meta http-equiv="refresh" content="1;URL=?p=fornecedores">
